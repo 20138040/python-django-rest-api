@@ -147,6 +147,7 @@ def article_view(request):
 
         cached = Redis.get('articles')
         if cached:
+            print("got from redis")
             return Response(cached)
 
         article = Article.objects.all()

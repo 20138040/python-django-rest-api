@@ -1,7 +1,13 @@
 import redis
 import json
 
-rdis = redis.StrictRedis(port=6379 , db=0)
+
+# this is used when not using redis container
+# rdis = redis.StrictRedis(port=6379 , db=0)
+
+
+# this is used when  using redis container
+rdis = redis.StrictRedis(host='redis',port=6379)
 
 class Redis():
 
