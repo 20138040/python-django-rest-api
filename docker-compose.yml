@@ -3,11 +3,28 @@ version: '3'
 services:
     web:
         build: .
-        command: python manage.py runserver 0.0.0.0:8008
+        command: >
+             bash -c "python manage.py migrate
+             && python manage.py runserver 0.0.0.0:8008"
         volumes:
             - .:/app
         ports:
             - "8008:8008"
+        # depends_on:
+        #     - migration
+        depends_on:
+            - db
+
+        
+    # migration:
+    #     build: .
+    #     command: python manage.py migrate
+    #     volumes:
+    #         - .:/app
+    #     links:
+    #         - db
+    #     depends_on:
+    #         - db
     redis:
         container_name: "redis"
         image: "redis:alpine"
@@ -15,3 +32,8 @@ services:
             - '6379'
         ports:
             - "6379:6379"
+    db:
+        image: postgres
+        environment:
+            POSTGRES_DB: "postgres"
+            POSTGRES_PASSWORD: "root"
