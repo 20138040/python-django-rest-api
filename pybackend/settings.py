@@ -87,16 +87,30 @@ WSGI_APPLICATION = 'pybackend.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'restapi',
+#        'USER': 'postgres',
+#        'PASSWORD': 'root',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+# }
+
+
+# this is used for docker postgres
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'restapi',
+       'NAME': 'postgres',
        'USER': 'postgres',
        'PASSWORD': 'root',
-       'HOST': 'localhost',
+       'HOST': 'db',
        'PORT': '5432',
    }
 }
+
 
 
 # Password validation

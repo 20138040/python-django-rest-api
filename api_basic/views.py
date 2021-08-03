@@ -15,6 +15,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
+from .utils import Redis
 
 
 
@@ -143,14 +144,22 @@ def article_view(request):
     List all code article, or create a new snippet.
     """
     if request.method == 'GET':
+
+        cached = Redis.get('articles')
+        if cached:
+            print("got from redis")
+            return Response(cached)
+
         article = Article.objects.all()
         serializer = ArticleSerializer(article, many=True)
+        Redis.set('articles', serializer.data)
         return Response(serializer.data)
 
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            Redis.remove('articles')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
