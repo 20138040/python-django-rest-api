@@ -4,6 +4,9 @@
     run command
     -- docker compose-up 
 
+    to create superuser run 
+    -- docker-compose  run --rm web ( this is the name of the service) sh -c "python manage.py createsuperuser"
+
 
     if want to run without docker 
      1 - install all the pacakges in the requirements.txt 
