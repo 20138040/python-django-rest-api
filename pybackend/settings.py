@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'public.apps.PublicConfig',
     'corsheaders',
     'rest_framework.authtoken',
-    'api_basic.apps.ApiBasicConfig'
+    'api_basic.apps.ApiBasicConfig',
+    'task_reminder'
 ]
 
 MIDDLEWARE = [
@@ -111,6 +113,18 @@ DATABASES = {
    }
 }
 
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'hello': {
+        'task': 'task_reminder.tasks.hello',
+        'schedule': crontab()  # execute every minute
+    }
+}
 
 
 # Password validation
